@@ -1,19 +1,19 @@
 services:
   angular-app:
-    build: ./Front/tulalip
+    build: ./Front/tagly
     ports:
       - "4200:4200"
     volumes:
-      - ./Front/tulalip/src:/app/src
+      - ./Front/tagly/src:/app/src
     networks:
       - angular-network
   
   nestjs-app:
-    build: ./Back/tulalip  # Ruta del proyecto NestJS
+    build: ./Back/tagly  # Ruta del proyecto NestJS
     ports:
       - "3000:3000"  # Exponemos el puerto 3000
     volumes:
-      - ./Back/tulalip:/app  # Monta el código fuente para desarrollo en tiempo real}
+      - ./Back/tagly:/app  # Monta el código fuente para desarrollo en tiempo real}
       - /app/node_modules
     networks:
       - angular-network
