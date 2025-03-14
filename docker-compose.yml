@@ -30,6 +30,7 @@ services:
       - ./data:/data
     networks:
       - angular-network
+      
 
 networks:
   angular-network:
