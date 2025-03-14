@@ -1,0 +1,36 @@
+services:
+  angular-app:
+    build: ./Front/tulalip
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./Front/tulalip/src:/app/src
+    networks:
+      - angular-network
+  
+  nestjs-app:
+    build: ./Back/tulalip  # Ruta del proyecto NestJS
+    ports:
+      - "3000:3000"  # Exponemos el puerto 3000
+    volumes:
+      - ./Back/tulalip:/app  # Monta el código fuente para desarrollo en tiempo real}
+      - /app/node_modules
+    networks:
+      - angular-network
+    command: npm run start:dev  # Inicia el servidor en producción
+    depends_on:
+      - gundb
+
+  gundb:
+    image: gundb/gun
+    container_name: tagly-gundb
+    ports:
+      - "8765:8765"
+    volumes:
+      - ./data:/data
+    networks:
+      - angular-network
+
+networks:
+  angular-network:
+    driver: bridge
