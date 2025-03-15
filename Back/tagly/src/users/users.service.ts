@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import Gun from 'gun';
 
 @Injectable()
-export class GunService {
-  private gun;
+export class UsersService {
+    private gun;
 
   constructor() {
     // Conectar a GunDB en el backend (por defecto, usa WebSocket en localhost)
@@ -17,7 +17,8 @@ export class GunService {
   
       this.gun.get('users').map().once((data: any, key: string) => {
         if (data && key !== '_') {
-          usersArray.push({ id: key, ...data });
+            delete data._;
+            usersArray.push({ id: key, ...data });
         }
       });
   
@@ -32,7 +33,7 @@ export class GunService {
   }
 
   // Guardar un usuario en GunDB
-  saveUser(userData: { username: string; email: string }) {
+  createUser(userData: { username: string; email: string }) {
     return new Promise((resolve, reject) => {
       if (!userData ||!userData.username || !userData.email) {
         reject('Faltan datos del usuario');
@@ -55,5 +56,4 @@ export class GunService {
       });
     });
   }
-  
 }

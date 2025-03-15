@@ -14,15 +14,6 @@ server.listen(8765, () => {
   console.log('GunDB está corriendo en http://localhost:8765');
 });
 
-// Interactúa con GunDB
-const users = gun.get('users');  // Obtener un nodo de datos (en este caso, 'user')
-
-users.put({ name: 'Sebastian', age: 30 });  // Escribir datos en el nodo 'user'
-
-// Escuchar los cambios en el nodo 'user'
-users.on((data) => {
-  console.log('Datos actualizados en el nodo user:', data);
-});
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

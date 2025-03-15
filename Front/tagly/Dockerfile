@@ -20,5 +20,6 @@ COPY . .
 EXPOSE 4200
 
 # Iniciamos el servidor de desarrollo de Angular
-CMD ["npm", "run", "start", "--", "--host", "0.0.0.0", "--no-watch"]
+CMD ["npm", "run", "start", "--", "--host", "0.0.0.0", "--poll=2000", "--live-reload"]
+
 
