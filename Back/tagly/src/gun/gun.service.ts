@@ -11,15 +11,49 @@ export class GunService {
   }
 
   // Método para obtener usuarios desde GunDB
-  getUsers() {
+  getUsers(): Promise<{ id: string; name?: string; email?: string }[]> {
     return new Promise((resolve, reject) => {
-      this.gun.get('users').once((data) => {
-        if (data) {
-          resolve(data);
+      const usersArray: { id: string; name?: string; email?: string }[] = [];
+  
+      this.gun.get('users').map().once((data: any, key: string) => {
+        if (data && key !== '_') {
+          usersArray.push({ id: key, ...data });
+        }
+      });
+  
+      setTimeout(() => {
+        if (usersArray.length > 0) {
+          resolve(usersArray);
         } else {
           reject('No se encontraron usuarios');
+        }
+      }, 500);
+    });
+  }
+
+  // Guardar un usuario en GunDB
+  saveUser(userData: { username: string; email: string }) {
+    return new Promise((resolve, reject) => {
+      if (!userData ||!userData.username || !userData.email) {
+        reject('Faltan datos del usuario');
+        return;
+      }
+
+      const userRef = this.gun.get('users').set(userData);
+      resolve({ message: 'Usuario guardado', data: userData });
+    });
+  }
+
+  async deleteUser(userId: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.gun.get('users').get(userId).put(null, (ack) => {
+        if (ack.err) {
+          reject('Error al eliminar el usuario');
+        } else {
+          resolve(`Usuario ${userId} eliminado correctamente`);
         }
       });
     });
   }
+  
 }
