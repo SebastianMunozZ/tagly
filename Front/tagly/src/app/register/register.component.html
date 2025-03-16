@@ -18,6 +18,12 @@
         @if(registerForm.get('username')?.invalid && registerForm.get('username')?.touched) {
             <div>El username es requerido.</div>
         }
+
+        <label for="email">Correo:</label>
+        <input id="email" formControlName="email" type="text" required />
+        @if(registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+            <div>El correo es requerido.</div>
+        }
     
         <label for="password">Contraseña:</label>
         <input id="password" formControlName="password" type="password" required />
@@ -28,11 +34,11 @@
 
         <label for="confirmPassword">Confirma tu contraseña:</label>
         <input id="confirmPassword" formControlName="confirmPassword" type="password" required />
-        @if(registerForm.get('confirmPassword')?.value != registerForm.get('password')?.value && registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched) {
+        @if(registerForm.errors?.['passwordsMismatch'] && registerForm.get('confirmPassword')?.touched) {
             <div>Las contraseñas deben ser iguales</div>
         }
     
-        <button type="submit" [disabled]="registerForm.invalid">Registrarse</button>
+        <button type="submit" >Registrarse</button>
         <button type="button" (click)="onLogin()">Iniciar Sesión</button>
     </form>
 </div>
