@@ -33,9 +33,9 @@ export class UsersService {
   }
 
   // Guardar un usuario en GunDB
-  createUser(userData: { username: string; email: string }) {
+  createUser(userData: { name: string; surname: string; username: string; email: string; password:string }) {
     return new Promise((resolve, reject) => {
-      if (!userData ||!userData.username || !userData.email) {
+      if (!userData || !userData.name || !userData.surname ||!userData.username || !userData.email || !userData.password) {
         reject('Faltan datos del usuario');
         return;
       }

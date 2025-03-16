@@ -16,7 +16,7 @@ export class UsersController {
   }
 
   @Post()
-  async createUser(@Body() userData: { username: string; email: string }) {
+  async createUser(@Body() userData: { name: string; surname: string; username: string; email: string; password:string }) {
     try {
       const message = await this.usersService.createUser(userData);
       return { message };
