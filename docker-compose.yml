@@ -13,7 +13,7 @@ services:
     ports:
       - "3000:3000"  # Exponemos el puerto 3000
     volumes:
-      - ./Back/tagly:/app  # Monta el código fuente para desarrollo en tiempo real}
+      - ./Back/tagly/src:/app/src  # Monta el código fuente para desarrollo en tiempo real}
       - /app/node_modules
     networks:
       - angular-network

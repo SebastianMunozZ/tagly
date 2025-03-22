@@ -38,8 +38,14 @@ export class RegisterComponent {
 
       this.UsersService.register({ name, surname, email, username, password }).subscribe({
         next: (response) => {
-          console.log('Registro exitoso:', response);
-          alert('Usuario registrado con éxito');
+          
+          if (response.error) {
+            alert(response.error.response)
+          } else {
+            alert('Usuario registrado con éxito');
+            this.router.navigate(['/login']);
+          }
+          
         },
         error: (error) => {
           console.error('Error en el registro:', error);

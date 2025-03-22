@@ -34,4 +34,14 @@ export class UsersController {
       return { error };
     }
   }
+
+  @Delete('/deletealluser/deletealluser')
+  async deleteAllUser() {
+    try {
+      const message = await this.usersService.deleteAllUser();
+      return { message };
+    } catch (error) {
+      return { error };
+    }
+  }
 }

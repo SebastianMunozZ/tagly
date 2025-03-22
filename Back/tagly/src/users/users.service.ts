@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import Gun from 'gun';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
@@ -32,16 +33,63 @@ export class UsersService {
     });
   }
 
-  // Guardar un usuario en GunDB
-  createUser(userData: { name: string; surname: string; username: string; email: string; password:string }) {
+  //Obtener un usuario por su tag
+  getUserByTag(tag: string): Promise <any> {
     return new Promise((resolve, reject) => {
-      if (!userData || !userData.name || !userData.surname ||!userData.username || !userData.email || !userData.password) {
-        reject('Faltan datos del usuario');
-        return;
-      }
+      let found = false;
+      this.gun.get('users').map().once((user) => {
+        if (user?.username === tag && !found) {
+          found = true;
+          console.log('Usuario existente: ', user);
+          resolve(user);
+        }
+      });
 
-      const userRef = this.gun.get('users').set(userData);
-      resolve({ message: 'Usuario guardado', data: userData });
+      setTimeout(() => {
+        if (!found) {
+          reject('El usuario no existe');
+        }
+      }, 500);
+    })
+  }
+
+  // Guardar un usuario en GunDB
+  createUser(userData: { name: string; surname: string; username: string; email: string; password: string }) {
+    return new Promise((resolve, reject) => {
+      // Validación de campos obligatorios
+      if (!userData.name || !userData.surname || !userData.username || !userData.email || !userData.password) {
+        return reject(new HttpException('Faltan datos del usuario', HttpStatus.BAD_REQUEST));
+      }
+  
+      const usersRef = this.gun.get('users');
+      let emailExists = false;
+      let usernameExists = false;
+
+      usersRef.map().once((user: any) => {
+        if (user?.email === userData.email) {
+          emailExists = true;
+        }
+        if (user?.username === userData.username) {
+          usernameExists = true;
+        }
+      });
+
+      setTimeout(() => {
+        if (emailExists) {
+          reject(new HttpException('El correo ya está registrado.', HttpStatus.CONFLICT));
+        } else if (usernameExists) {
+          reject(new HttpException('El nombre de usuario ya está en uso.', HttpStatus.CONFLICT));
+        } else {
+          try {
+            userData.password = bcrypt.hashSync(userData.password, 10);
+            usersRef.set(userData);
+            resolve({ message: 'Usuario guardado exitosamente', data: userData });
+          } catch (error) {
+            reject(new HttpException('Error al hashear la contraseña', HttpStatus.INTERNAL_SERVER_ERROR));
+          }
+          
+        }
+      }, 1000);
     });
   }
 
@@ -54,6 +102,29 @@ export class UsersService {
           resolve(`Usuario ${userId} eliminado correctamente`);
         }
       });
+    });
+  }
+
+  async deleteAllUser(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const userRef = this.gun.get('users');
+
+      userRef.map().once((data,key) => {
+        if(data) {
+          userRef.get(key).put(null)
+        }
+      });
+
+      setTimeout(() => {
+        userRef.once((data) => {
+          console.log(data);
+          if (data) {
+            reject('Error: Algunos usuarios no se eliminaron correctamente.');
+          } else {
+            resolve('Todos los usuarios eliminados correctamente');
+          }
+        });
+      }, 1000); // Espera de 1 segundo para confirmar
     });
   }
 }
