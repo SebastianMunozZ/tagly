@@ -30,15 +30,18 @@ export class LoginComponent {
       const { username, password } = this.loginForm.value;
       this.AuthService.login( username, password ).subscribe({
         next: (response) => {
-          if (response.message) {
-            alert('Tag o contraseña incorrectos')
-          } else {
+          if (response.access_token) {
+            // Guardamos el token en localStorage
+            localStorage.setItem('token', response.access_token);
             alert('Inicio de sesión exitoso');
-            //this.router.navigate(['/login']);
+  
+            // Redirigimos al muro principal (home)
+            this.router.navigate(['/home']);
+          } else {
+            alert('Tag o contraseña incorrectos');
           }
         },
         error: (error) => {
-          console.error('Error en el inicio de sesión:', error);
           this.errorMessage = 'Error en el inicio de sesión. Inténtalo de nuevo.';
         }
       });

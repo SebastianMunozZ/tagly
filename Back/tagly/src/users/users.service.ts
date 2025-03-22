@@ -117,7 +117,6 @@ export class UsersService {
 
       setTimeout(() => {
         userRef.once((data) => {
-          console.log(data);
           if (data) {
             reject('Error: Algunos usuarios no se eliminaron correctamente.');
           } else {
