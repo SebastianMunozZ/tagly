@@ -15,6 +15,16 @@ export class UsersController {
     }
   }
 
+  @Get(':tag')
+  async getUserByTag(@Param('tag') tag: string) {
+    try {
+      const user = await this.usersService.getUserByTag(tag);
+      return user;
+    } catch (error) {
+      return { error };
+    }
+  }
+
   @Post()
   async createUser(@Body() userData: { name: string; surname: string; username: string; email: string; password:string }) {
     try {
@@ -35,13 +45,5 @@ export class UsersController {
     }
   }
 
-  @Delete('/deletealluser/deletealluser')
-  async deleteAllUser() {
-    try {
-      const message = await this.usersService.deleteAllUser();
-      return { message };
-    } catch (error) {
-      return { error };
-    }
-  }
+  
 }
