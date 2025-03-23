@@ -29,6 +29,7 @@
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.7",
     "gun": "^0.2020.1240",
+    "magic-string": "^0.30.17",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.2",

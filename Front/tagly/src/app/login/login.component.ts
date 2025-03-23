@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { RegisterComponent } from '../register/register.component';
-import { UsersService } from '../services/users.service';
 import { AuthService } from '../services/auth.service';
 
 @Component({

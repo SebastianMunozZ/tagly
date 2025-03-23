@@ -23,6 +23,6 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');  // Eliminar el token en logout
-    this.router.navigate(['/register']);
+    this.router.navigate(['/index']);
   }
 }

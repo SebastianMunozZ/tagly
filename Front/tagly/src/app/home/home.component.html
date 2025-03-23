@@ -1,1 +1,14 @@
+<div class="container">
+    <h1 class="text-center">MyTag!</h1>
+    <div class="row">
+      <div class="col-md-6 offset-md-3">
+        <form [formGroup]="postForm" (ngSubmit)="publishPost()">
+          <div class="form-group">
+            <textarea class="form-control" formControlName="status" placeholder="Comparte algo..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Publicar</button>
+        </form>
+      </div>
+    </div>
+  </div>
 <button (click)="logOut()">Cerrar sesión</button>
